@@ -20,7 +20,7 @@ class ShopAutomationUI:
         if not self.automation.find_and_select_window():
             messagebox.showerror("Error", "No Epic Seven window found!\nPlease start the game first.")
             return
-        
+
         self.root = tk.Tk()
         self.root.title("Epic Seven Shop Automation")
         self.root.geometry("500x600")
@@ -93,10 +93,26 @@ class ShopAutomationUI:
         
         self.sky_stones_var.trace('w', self.update_max_refreshes)
         
+        gold_frame = ttk.LabelFrame(main_frame, text="Gold Management", padding="10")
+        gold_frame.grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        self.gold_check_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(
+            gold_frame,
+            text="Enable gold threshold (stop below 300,000)",
+            variable=self.gold_check_var,
+            command=self.on_toggle_gold_management
+        ).grid(row=0, column=0, columnspan=2, sticky=tk.W)
+
+        ttk.Label(gold_frame, text="Current Gold:").grid(row=1, column=0, sticky=tk.W)
+        self.gold_var = tk.StringVar(value="")
+        self.gold_entry = ttk.Entry(gold_frame, textvariable=self.gold_var, width=12, state='disabled')
+        self.gold_entry.grid(row=1, column=1, sticky=tk.W, padx=(10, 0))
+
         info_frame = ttk.LabelFrame(main_frame, text="Info", padding="10")
-        info_frame.grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E))
+        info_frame.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E))
         
-        info_text = "• Run Once: Single refresh (3 sky stones)\n• Loop: Continuous until stopped or budget reached\n• Press 'q' during loop to stop early\n• Window is resizable if needed"
+        info_text = "• Run Once: Single refresh (3 sky stones)\n• Loop: Continuous until stopped or budget reached\n• Press 'q' during loop to stop early"
         ttk.Label(info_frame, text=info_text, justify=tk.LEFT).grid(row=0, column=0, sticky=tk.W)
         
         canvas.pack(side="left", fill="both", expand=True)
@@ -137,6 +153,10 @@ class ShopAutomationUI:
         
         def run_single():
             try:
+                # Apply gold settings for single run as well
+                if not self.apply_gold_settings():
+                    return
+
                 self.automation.sky_stone_budget = 3
                 self.automation.max_refreshes = 1
                 self.automation.running = True
@@ -145,7 +165,11 @@ class ShopAutomationUI:
                 self.update_status("Running single cycle...")
                 self.automation.run_automation_cycle()
                 self.update_counters()
-                self.update_status("Single run complete!")
+                if self.automation.gold_management_enabled and self.automation.stop_due_to_gold:
+                    messagebox.showinfo("Gold Threshold Reached", "Configured gold dropped below 300,000. Stopping.")
+                    self.update_status("Gold threshold reached")
+                else:
+                    self.update_status("Single run complete!")
                 
             except Exception as e:
                 messagebox.showerror("Error", f"Error during automation: {e}")
@@ -175,10 +199,16 @@ class ShopAutomationUI:
             messagebox.showerror("Error", "Please enter a valid number for sky stones")
             return
         
+        # Apply gold settings before starting the loop
+        if not self.apply_gold_settings():
+            return
+
         self.is_looping = True
         self.loop_btn.config(text="Stop Loop")
         self.run_once_btn.config(state='disabled')
         self.sky_stones_entry.config(state='disabled')
+        if self.gold_check_var.get():
+            self.gold_entry.config(state='disabled')
         
         self.automation.sky_stone_budget = sky_stones
         self.automation.max_refreshes = sky_stones // 3
@@ -199,9 +229,14 @@ class ShopAutomationUI:
                     
                     if self.automation.refreshes_done < self.automation.max_refreshes:
                         self.update_status(f"Waiting... Cycle {self.automation.refreshes_done + 1}/{self.automation.max_refreshes}")
-                        time.sleep(.7)
                 
-                if self.automation.refreshes_done >= self.automation.max_refreshes:
+                if self.automation.stop_due_to_gold:
+                    self.update_status("Gold threshold reached")
+                    try:
+                        messagebox.showinfo("Gold Threshold Reached", "Configured gold dropped below 300,000. Stopping.")
+                    except Exception:
+                        pass
+                elif self.automation.refreshes_done >= self.automation.max_refreshes:
                     self.update_status("Budget reached!")
                 else:
                     self.update_status("Loop stopped early")
@@ -221,8 +256,32 @@ class ShopAutomationUI:
         self.loop_btn.config(text="Start Loop")
         self.run_once_btn.config(state='normal')
         self.sky_stones_entry.config(state='normal')
+        if self.gold_check_var.get():
+            self.gold_entry.config(state='normal')
         if self.automation.running:
             self.update_status("Stopping...")
+
+    def on_toggle_gold_management(self):
+        if self.gold_check_var.get():
+            self.gold_entry.config(state='normal')
+        else:
+            self.gold_entry.delete(0, tk.END)
+            self.gold_entry.config(state='disabled')
+
+    def apply_gold_settings(self):
+        self.automation.gold_management_enabled = bool(self.gold_check_var.get())
+        self.automation.stop_due_to_gold = False
+        if not self.automation.gold_management_enabled:
+            return True
+        try:
+            provided_gold = int(self.gold_var.get())
+            if provided_gold < 0:
+                raise ValueError
+            self.automation.user_gold_remaining = provided_gold
+            return True
+        except ValueError:
+            messagebox.showerror("Error", "Please enter a valid non-negative number for Current Gold")
+            return False
     
     def keyboard_listener(self):
         keyboard.wait('q')
@@ -259,7 +318,7 @@ class ShopAutomation:
         self.pause_between_actions = 0.1
         self.refresh_button_pos = None
         self.confirm_button_pos = None
-        self.buy_button_offset = 700
+        self.buy_button_offset = 900
         self.scroll_amount = -500
         pyautogui.FAILSAFE = False
         pyautogui.PAUSE = 0
@@ -271,7 +330,13 @@ class ShopAutomation:
         self.sky_stone_budget = 0
         self.max_refreshes = 0
         self.refreshes_done = 0
+
+        # Gold management
+        self.gold_management_enabled = False
+        self.user_gold_remaining = 0
+        self.stop_due_to_gold = False
         
+        # Settings file for window preference
         self.settings_file = "epic_seven_automation_settings.json"
     
     def save_window_preference(self):
@@ -289,6 +354,7 @@ class ShopAutomation:
                 print(f"Could not save window preference: {e}")
     
     def load_window_preference(self):
+        """Load saved window preference"""
         if os.path.exists(self.settings_file):
             try:
                 with open(self.settings_file, 'r') as f:
@@ -324,7 +390,7 @@ class ShopAutomation:
                         return True
                     except:
                         pass
-
+        
         if len(windows) == 1:
             self.game_window = windows[0][0]
             self.game_window_title = windows[0][1]
@@ -361,11 +427,11 @@ class ShopAutomation:
                 rb.configure(command=lambda t=title, h=hwnd: [selected_hwnd.set(h), selected_title.set(t)])
             except:
                 continue
-        
+
         if windows:
             selected_hwnd.set(windows[0][0])
             selected_title.set(windows[0][1])
-
+        
         remember_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(selection_window, text="Remember this selection", 
                        variable=remember_var).pack(pady=10)
@@ -388,7 +454,7 @@ class ShopAutomation:
                   command=confirm_selection).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Cancel", 
                   command=cancel_selection).pack(side=tk.LEFT, padx=5)
-
+        
         selection_window.update_idletasks()
         x = (selection_window.winfo_screenwidth() // 2) - (selection_window.winfo_width() // 2)
         y = (selection_window.winfo_screenheight() // 2) - (selection_window.winfo_height() // 2)
@@ -439,10 +505,10 @@ class ShopAutomation:
         print(f"Setting up positions for window at: left={left}, top={top}, width={window_width}, height={window_height}")
         
         confirm_x = left + window_width // 2 + 100
-        confirm_y = top + int(window_height * 0.70) - 70  # Moved up 70 pixels
+        confirm_y = top + int(window_height * 0.70) - 70
         self.confirm_button_pos = (confirm_x, confirm_y)
         
-        refresh_x = left + window_width // 2 - 700  # Changed from -200 to -400 (200 pixels more left)
+        refresh_x = left + window_width // 2 - 400  # Changed from -200 to -400 (200 pixels more left)
         refresh_y = top + window_height - 100
         self.refresh_button_pos = (refresh_x, refresh_y)
         
@@ -454,8 +520,9 @@ class ShopAutomation:
             try:
                 if win32gui.IsIconic(self.game_window):
                     win32gui.ShowWindow(self.game_window, win32con.SW_RESTORE)
+                
                 win32gui.SetForegroundWindow(self.game_window)
-                time.sleep(0.2)
+                time.sleep(0.05)
                 print("Epic Seven window focused")
             except Exception as e:
                 print(f"Warning: Could not focus window: {e}")
@@ -615,7 +682,17 @@ class ShopAutomation:
         
         self.purchases_made += 1
         print(f"Purchased {item_name}! Total purchases: {self.purchases_made}")
-        time.sleep(1.0)
+        # Gold tracking when enabled
+        if self.gold_management_enabled:
+            try:
+                cost = 280000 if "Mystic" in item_name else 184000
+                self.user_gold_remaining -= cost
+                print(f"Gold remaining (configured): {self.user_gold_remaining}")
+                if self.user_gold_remaining < 300000:
+                    self.stop_due_to_gold = True
+            except Exception as _e:
+                pass
+        time.sleep(.5)
     
     def refresh_shop(self):
         self.focus_game_window()
@@ -628,6 +705,7 @@ class ShopAutomation:
         pyautogui.click()
         time.sleep(0.5)
         
+        # Now click the confirm button to actually refresh
         print(f"Confirming refresh at position: {self.confirm_button_pos}")
         pyautogui.moveTo(self.confirm_button_pos[0], self.confirm_button_pos[1], duration=0)
         time.sleep(self.pause_between_actions)
@@ -646,7 +724,7 @@ class ShopAutomation:
             pyautogui.moveTo(self.confirm_button_pos[0], self.confirm_button_pos[1], duration=0)
             time.sleep(0.1)
         pyautogui.scroll(self.scroll_amount)
-        time.sleep(0.8)
+        time.sleep(0.5)
     
     def run_automation_cycle(self):
         print(f"\n=== Starting cycle {self.refreshes_done + 1} ===")
@@ -656,6 +734,9 @@ class ShopAutomation:
         self.check_and_buy_items()
         self.scroll_shop()
         self.check_and_buy_items()
+        # If gold threshold reached during this cycle, stop before the next cycle
+        if self.gold_management_enabled and self.stop_due_to_gold:
+            self.running = False
         print(f"=== Cycle {self.refreshes_done} complete ===")
 
 def main():
