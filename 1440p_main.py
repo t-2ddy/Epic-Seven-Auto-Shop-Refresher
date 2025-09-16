@@ -12,6 +12,7 @@ from PIL import Image
 import keyboard
 import json
 import os
+import sys
 
 class ShopAutomationUI:
     def __init__(self):
@@ -529,15 +530,22 @@ class ShopAutomation:
     
     def find_game_window(self):
         return self.validate_window()
-    
+
+    def resource_path(self, relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
     def load_target_images(self):
         try:
-            self.cov_image = cv2.imread('shop_cov.png', cv2.IMREAD_COLOR)
+            self.cov_image = cv2.imread(self.resource_path('shop_cov.png'), cv2.IMREAD_COLOR)
             if self.cov_image is None:
                 print("Could not load shop_cov.png")
                 return False
             
-            self.myst_image = cv2.imread('shop_myst.png', cv2.IMREAD_COLOR)
+            self.myst_image = cv2.imread(self.resource_path('shop_myst.png'), cv2.IMREAD_COLOR)
             if self.myst_image is None:
                 print("Could not load shop_myst.png")
                 return False
