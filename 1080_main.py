@@ -12,6 +12,7 @@ from PIL import Image
 import keyboard
 import json
 import os
+import sys
 
 class ShopAutomationUI:
     def __init__(self):
@@ -161,6 +162,9 @@ class ShopAutomationUI:
                 self.automation.max_refreshes = 1
                 self.automation.running = True
                 self.automation.refreshes_done = 0
+
+                # Ensure the game is fullscreen before starting the cycle
+                self.automation.make_fullscreen()
                 
                 self.update_status("Running single cycle...")
                 self.automation.run_automation_cycle()
@@ -247,6 +251,9 @@ class ShopAutomationUI:
             finally:
                 self.stop_loop()
         
+        # Ensure the game is fullscreen before starting the loop
+        self.automation.make_fullscreen()
+
         self.loop_thread = threading.Thread(target=run_loop, daemon=True)
         self.loop_thread.start()
     
@@ -318,7 +325,7 @@ class ShopAutomation:
         self.pause_between_actions = 0.1
         self.refresh_button_pos = None
         self.confirm_button_pos = None
-        self.buy_button_offset = 900
+        self.buy_button_offset = 700
         self.scroll_amount = -500
         pyautogui.FAILSAFE = False
         pyautogui.PAUSE = 0
@@ -338,9 +345,30 @@ class ShopAutomation:
         
         # Settings file for window preference
         self.settings_file = "epic_seven_automation_settings.json"
+        # Embedded preference to avoid needing a JSON file
+        # We only embed the title now; size/position is derived from the fullscreen window
+        self.use_embedded_window_pref = True
+        self.embedded_window_pref = {
+            'window_title': 'Epic Seven'
+        }
     
+    def make_fullscreen(self):
+        """Maximize the Epic Seven window to fullscreen/borderless as best as Windows allows."""
+        if not self.game_window:
+            return
+        try:
+            # Bring to foreground first
+            self.focus_game_window()
+            # Try maximize
+            win32gui.ShowWindow(self.game_window, win32con.SW_MAXIMIZE)
+            time.sleep(0.1)
+        except Exception as e:
+            print(f"Warning: Could not set fullscreen: {e}")
+
     def save_window_preference(self):
-        """Save the selected window information"""
+        """No-op when using embedded preference."""
+        if self.use_embedded_window_pref:
+            return
         if self.game_window and self.game_window_title:
             settings = {
                 'window_title': self.game_window_title,
@@ -354,7 +382,9 @@ class ShopAutomation:
                 print(f"Could not save window preference: {e}")
     
     def load_window_preference(self):
-        """Load saved window preference"""
+        """Load embedded preference or JSON if not embedded."""
+        if self.use_embedded_window_pref:
+            return self.embedded_window_pref
         if os.path.exists(self.settings_file):
             try:
                 with open(self.settings_file, 'r') as f:
@@ -386,6 +416,8 @@ class ShopAutomation:
                         self.game_window = hwnd
                         self.game_window_title = title
                         print(f"Using saved window preference: {title}")
+                        # Make fullscreen and then compute positions based on actual window rect
+                        self.make_fullscreen()
                         self.setup_button_positions()
                         return True
                     except:
@@ -395,6 +427,8 @@ class ShopAutomation:
             self.game_window = windows[0][0]
             self.game_window_title = windows[0][1]
             print(f"Found single window: {windows[0][1]}")
+            # Make fullscreen and then compute positions based on actual window rect
+            self.make_fullscreen()
             self.setup_button_positions()
             self.save_window_preference()
             return True
@@ -474,6 +508,8 @@ class ShopAutomation:
         
         if self.game_window and self.game_window_title:
             print(f"Selected window: {self.game_window_title}")
+            # Make fullscreen and then compute positions based on actual window rect
+            self.make_fullscreen()
             self.setup_button_positions()
             
             if remember_var.get():
@@ -529,15 +565,22 @@ class ShopAutomation:
     
     def find_game_window(self):
         return self.validate_window()
-    
+
+    def resource_path(self, relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
     def load_target_images(self):
         try:
-            self.cov_image = cv2.imread('1080shop_cov.png', cv2.IMREAD_COLOR)
+            self.cov_image = cv2.imread(self.resource_path('1080shop_cov.png'), cv2.IMREAD_COLOR)
             if self.cov_image is None:
                 print("Could not load shop_cov.png")
                 return False
             
-            self.myst_image = cv2.imread('1080shop_myst.png', cv2.IMREAD_COLOR)
+            self.myst_image = cv2.imread(self.resource_path('1080shop_myst.png'), cv2.IMREAD_COLOR)
             if self.myst_image is None:
                 print("Could not load shop_myst.png")
                 return False
