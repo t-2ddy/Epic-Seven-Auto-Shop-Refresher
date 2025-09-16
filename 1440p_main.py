@@ -199,7 +199,6 @@ class ShopAutomationUI:
                     
                     if self.automation.refreshes_done < self.automation.max_refreshes:
                         self.update_status(f"Waiting... Cycle {self.automation.refreshes_done + 1}/{self.automation.max_refreshes}")
-                        time.sleep(.7)
                 
                 if self.automation.refreshes_done >= self.automation.max_refreshes:
                     self.update_status("Budget reached!")
@@ -458,7 +457,7 @@ class ShopAutomation:
                     win32gui.ShowWindow(self.game_window, win32con.SW_RESTORE)
                 
                 win32gui.SetForegroundWindow(self.game_window)
-                time.sleep(0.2)
+                time.sleep(0.05)
                 print("Epic Seven window focused")
             except Exception as e:
                 print(f"Warning: Could not focus window: {e}")
@@ -618,7 +617,7 @@ class ShopAutomation:
         
         self.purchases_made += 1
         print(f"Purchased {item_name}! Total purchases: {self.purchases_made}")
-        time.sleep(1.0)
+        time.sleep(.5)
     
     def refresh_shop(self):
         self.focus_game_window()
@@ -650,7 +649,7 @@ class ShopAutomation:
             pyautogui.moveTo(self.confirm_button_pos[0], self.confirm_button_pos[1], duration=0)
             time.sleep(0.1)
         pyautogui.scroll(self.scroll_amount)
-        time.sleep(0.8)
+        time.sleep(0.5)
     
     def run_automation_cycle(self):
         print(f"\n=== Starting cycle {self.refreshes_done + 1} ===")

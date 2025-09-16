@@ -20,7 +20,7 @@ A Python automation tool for Epic Seven that automatically refreshes the shop an
 - Python 3.7+
 - Epic Seven (PC version)
 - Windows OS
-- 1440p display resolution (optimized for)
+- 1440p and 1080p display resolution (optimized for)
 
 ## Installation
 
@@ -41,11 +41,8 @@ pip install tkinter pyautogui opencv-python numpy pywin32 pillow keyboard
 
 ## Usage
 
-1. Launch Epic Seven and navigate to the shop
-2. Run the automation:
-```bash
-python 1440p_main.py
-```
+1. YOU NEED TO COMPILE AND BUILD THE APP FOR IT TO WORK DO TO HOW 
+   SMILEGATE USES PERMS FOR THEIR APPS!!!
 
 3. **First Time Setup**:
    - The app will detect Epic Seven windows automatically
