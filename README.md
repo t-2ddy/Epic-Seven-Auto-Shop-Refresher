@@ -41,20 +41,20 @@ pip install tkinter pyautogui opencv-python numpy pywin32 pillow keyboard
 
 ## Usage
 
-1. YOU NEED TO COMPILE AND BUILD THE APP FOR IT TO WORK DO TO HOW 
+YOU NEED TO COMPILE AND BUILD THE APP FOR IT TO WORK DO TO HOW 
    SMILEGATE USES PERMS FOR THEIR APPS!!!
 
-3. **First Time Setup**:
+1. **First Time Setup**:
    - The app will detect Epic Seven windows automatically
    - If multiple windows are found, select your preferred one
    - Window preference will be saved for future use
 
-4. **Configure Settings**:
+2. **Configure Settings**:
    - Set your sky stone budget (default: 300)
    - Each refresh costs 3 sky stones
    - Max refreshes = Budget ÷ 3
 
-5. **Run Automation**:
+3. **Run Automation**:
    - **Run Once**: Single refresh cycle (3 sky stones)
    - **Start Loop**: Continuous automation until budget is reached
    - Press 'Q' during loop to stop early
