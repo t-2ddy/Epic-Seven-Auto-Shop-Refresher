@@ -4,7 +4,7 @@ An automated bot for Epic Seven's Secret Shop that automatically refreshes and p
 
 ## Quick Start
 
-1) **You can get the newest version from this google drive link **Version 2**: [Download here](https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing)**
+1) **You can get the newest version from this google drive link **Version 2.1**: [Download here](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing)**
 2) **Extract anywhere on your pc**
 3) **Run bot/app as admin!!! Due to how smilegate handels their own games you need to allow the same permitions to the bot as well**
 4) **Your screen will auto-boarderfullscreen, keep it like that and move to the secret shop**
@@ -24,7 +24,7 @@ An automated bot for Epic Seven's Secret Shop that automatically refreshes and p
 
 - **Current Version**: 2.0 Beta
 - **Version 1**: [Download here](https://drive.google.com/file/d/1VnVWywmsZ36UmtVhqn1e2B_h7gO3cig3/view?usp=sharing)
-- **Version 2**: [Download here](https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing)
+- **Version 2.1**: [Download here](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing)
 
 ## How It Works
 
