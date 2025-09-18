@@ -354,6 +354,10 @@ class ShopAutomation:
         self.gold_management_enabled = False
         self.user_gold_remaining = 0
         self.stop_due_to_gold = False
+
+        # Per-cycle purchase tracking to avoid double-buying in one shop
+        self.bought_cov_this_cycle = False
+        self.bought_myst_this_cycle = False
         
         # Settings file for window preference
         self.settings_file = "epic_seven_automation_settings.json"
@@ -689,7 +693,7 @@ class ShopAutomation:
         strip_x_offset = (win32gui.GetWindowRect(self.game_window)[2] - left - self.strip_width) // 2
         
         found_cov, conf_cov, loc_cov = self.find_item_on_screen(screen, self.cov_image, "Covenant Bookmarks")
-        if found_cov:
+        if found_cov and not self.bought_cov_this_cycle:
             h, w = self.cov_image.shape[:2]
             click_x = left + strip_x_offset + loc_cov[0] + w + self.buy_button_offset
             click_y = top + loc_cov[1] + h // 2
@@ -698,10 +702,18 @@ class ShopAutomation:
             self.click_and_confirm(click_x, click_y, "Covenant Bookmarks")
             self.cov_purchased += 1
             purchased_something = True
+            self.bought_cov_this_cycle = True
             time.sleep(0.5)
         
+        # Re-capture the screen after a purchase to reduce stale coordinates
+        if purchased_something:
+            screen = self.capture_game_window()
+            if screen is None:
+                print("Failed to capture screen after purchase")
+                return True
+        
         found_myst, conf_myst, loc_myst = self.find_item_on_screen(screen, self.myst_image, "Mystic Bookmarks")
-        if found_myst:
+        if found_myst and not self.bought_myst_this_cycle:
             h, w = self.myst_image.shape[:2]
             click_x = left + strip_x_offset + loc_myst[0] + w + self.buy_button_offset
             click_y = top + loc_myst[1] + h // 2
@@ -710,6 +722,7 @@ class ShopAutomation:
             self.click_and_confirm(click_x, click_y, "Mystic Bookmarks")
             self.myst_purchased += 1
             purchased_something = True
+            self.bought_myst_this_cycle = True
         
         return purchased_something
     
@@ -784,6 +797,9 @@ class ShopAutomation:
     def run_automation_cycle(self):
         print(f"\n=== Starting cycle {self.refreshes_done + 1} ===")
         self.focus_game_window()
+        # Reset per-cycle purchase tracking flags
+        self.bought_cov_this_cycle = False
+        self.bought_myst_this_cycle = False
         
         self.refresh_shop()
         self.check_and_buy_items()
