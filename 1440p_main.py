@@ -31,7 +31,14 @@ class ShopAutomationUI:
         
     def setup_ui(self):
         try:
-            self.root.iconbitmap(self.automation.resource_path('icon.ico'))
+            icon_path = self.automation.resource_path('icon.png')
+            if os.path.exists(icon_path):
+                icon_image = tk.PhotoImage(file=icon_path)
+                self.root.iconphoto(True, icon_image)
+            else:
+                ico_path = self.automation.resource_path('icon.ico')
+                if os.path.exists(ico_path):
+                    self.root.iconbitmap(ico_path)
         except Exception as e:
             print(f"Could not load window icon: {e}")
 
