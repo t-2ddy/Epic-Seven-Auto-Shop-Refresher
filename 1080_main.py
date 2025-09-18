@@ -30,6 +30,11 @@ class ShopAutomationUI:
         self.setup_ui()
         
     def setup_ui(self):
+        try:
+            self.root.iconbitmap(self.automation.resource_path('icon.ico'))
+        except Exception as e:
+            print(f"Could not load window icon: {e}")
+    
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         
@@ -755,7 +760,7 @@ class ShopAutomation:
         pyautogui.click()
         time.sleep(0.05)
         pyautogui.click()
-        time.sleep(1.2)
+        time.sleep(1.0)
         
         self.refreshes_done += 1
     
@@ -767,7 +772,7 @@ class ShopAutomation:
             pyautogui.moveTo(self.confirm_button_pos[0], self.confirm_button_pos[1], duration=0)
             time.sleep(0.1)
         pyautogui.scroll(self.scroll_amount)
-        time.sleep(0.5)
+        time.sleep(0.85)
     
     def run_automation_cycle(self):
         print(f"\n=== Starting cycle {self.refreshes_done + 1} ===")
