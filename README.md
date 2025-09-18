@@ -1,131 +1,167 @@
-# Epic-Seven-Auto-Shop-Refresher
-A Python automation tool for Epic Seven's shop that automatically refreshes and purchases Covenant and Mystic Bookmarks. Features a user-friendly GUI with budget controls, real-time stats tracking, and multi-window support for efficient bookmark farming.
+# Epic Seven Shop Automation Bot
 
-# Epic Seven Shop Automation
+An automated bot for Epic Seven's Secret Shop that automatically refreshes and purchases Covenant and Mystic Bookmarks. This tool helps streamline the tedious process of manually refreshing the shop to find and purchase bookmarks.
 
-A Python automation tool for Epic Seven that automatically refreshes the shop and purchases Covenant and Mystic Bookmarks. Built with a user-friendly GUI interface for easy control and monitoring.
+## Quick Start
+
+1) **You can get the newest version from this google drive link **Version 2**: [Download here]([https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing))**
+2) **Extract anywhere on your pc**
+3) **Run bot/app as admin!!! Due to how smilegate handels their own games you need to allow the same permitions to the bot as well**
+4) **Your screen will auto-boarderfullscreen, keep it like that and move to the secret shop**
+5) **Enter the amount of skystones (and gold) you would like to spend and AFK**
 
 ## Features
 
-- **Automatic Shop Refresh**: Continuously refreshes the shop using sky stones
+- **Automatic Shop Refresh**: Continuously refreshes the secret shop using sky stones
 - **Smart Item Detection**: Uses computer vision to identify Covenant and Mystic Bookmarks
-- **Budget Control**: Set sky stone limits to prevent overspending
-- **Real-time Statistics**: Track purchases, refreshes, and bookmark counts
-- **Multi-window Support**: Automatically detects and remembers Epic Seven windows
-- **Flexible Operation**: Run single cycles or continuous loops
-- **Safety Features**: Emergency stop with 'Q' key and window validation
+- **Dual Resolution Support**: Separate versions optimized for 1080p and 1440p displays
+- **Gold Management**: Optional gold threshold to prevent spending below a specified amount
+- **Flexible Controls**: Run single cycles or continuous loops with customizable budgets
+- **Safety Features**: Emergency stop with 'Q' key, window validation, and error handling
+- **User-Friendly GUI**: Clean interface with real-time statistics and status updates
 
-## Requirements
+## Version Information
 
-- Python 3.7+
-- Epic Seven (PC version)
-- Windows OS
-- 1440p and 1080p display resolution (optimized for)
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/epic-seven-shop-automation.git
-cd epic-seven-shop-automation
-```
-
-2. Install required dependencies:
-```bash
-pip install tkinter pyautogui opencv-python numpy pywin32 pillow keyboard
-```
-
-3. Add the required image files to the project directory:
-   - `shop_cov.png` - Screenshot of Covenant Bookmarks in shop
-   - `shop_myst.png` - Screenshot of Mystic Bookmarks in shop
-
-## Usage
-
-YOU NEED TO COMPILE AND BUILD THE APP FOR IT TO WORK DO TO HOW 
-   SMILEGATE USES PERMS FOR THEIR APPS!!!
-
-1. **First Time Setup**:
-   - The app will detect Epic Seven windows automatically
-   - If multiple windows are found, select your preferred one
-   - Window preference will be saved for future use
-
-2. **Configure Settings**:
-   - Set your sky stone budget (default: 300)
-   - Each refresh costs 3 sky stones
-   - Max refreshes = Budget ÷ 3
-
-3. **Run Automation**:
-   - **Run Once**: Single refresh cycle (3 sky stones)
-   - **Start Loop**: Continuous automation until budget is reached
-   - Press 'Q' during loop to stop early
+- **Current Version**: 2.0 Beta
+- **Version 1**: [Download here](https://drive.google.com/file/d/1VnVWywmsZ36UmtVhqn1e2B_h7gO3cig3/view?usp=sharing)
+- **Version 2**: [Download here]([https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing))
 
 ## How It Works
 
-1. **Window Detection**: Automatically finds and focuses Epic Seven windows
-2. **Screen Capture**: Takes screenshots of the shop area for analysis
-3. **Image Recognition**: Uses OpenCV template matching to find bookmarks
-4. **Purchase Flow**: Clicks buy button → confirms purchase → tracks statistics
-5. **Shop Refresh**: Clicks refresh button → confirms → waits for reload
-6. **Scroll Check**: Scrolls down to check for items in lower shop area
+The bot operates by:
 
-## Configuration
+1. **Window Detection**: Automatically finds and focuses the Epic Seven game window
+2. **Image Recognition**: Captures screenshots and uses OpenCV template matching to identify bookmarks
+3. **Automated Clicking**: Simulates mouse clicks to purchase items and refresh the shop
+4. **Shop Cycling**: Refreshes the shop, checks for items, scrolls down, checks again, then repeats
 
-### Display Settings
-- Optimized for 1440p resolution
-- Captures 600px wide strip from center of game window
-- Adjusts button positions based on window size
+### Technical Details
 
-### Detection Settings
-- Confidence threshold: 89% for item recognition
-- Supports multiple template matching methods
-- Automatic fallback if primary method fails
+- Uses **PyAutoGUI** for mouse automation
+- **OpenCV** for computer vision and template matching
+- **Win32 API** for window management and screen capture
+- **Tkinter** for the graphical user interface
+- Confidence threshold of 89% for item detection accuracy
 
-### Timing Settings
-- 0.1s pause between actions
-- 0.5s wait after purchases
-- 1.0s wait after shop refresh
-- 0.8s wait after scrolling
+## Requirements
 
-## Troubleshooting
+### Runtime Requirements
+- Windows 10/11
+- Epic Seven running in windowed or fullscreen mode
+- Minimum 4GB RAM
+- .NET Framework (usually pre-installed)
 
-### Common Issues
+### Development Requirements
+- Python 3.8+
+- Required packages (see `requirements.txt`):
+  - opencv-python==4.11.0.86
+  - pyautogui==0.9.54
+  - pillow==11.3.0
+  - numpy==2.3.1
+  - keyboard==0.13.5
+  - pywin32==310
+  - pyinstaller==6.14.2
 
-**"No Epic Seven window found"**
-- Ensure Epic Seven is running and visible
-- Try restarting the application
-- Check if game window title contains "Epic Seven"
+## Installation & Building
 
-**"Could not load target images"**
-- Verify `shop_cov.png` and `shop_myst.png` are in the same folder
-- Ensure image files are valid PNG format
-- Take new screenshots if items aren't being detected
+### Option 1: Use Pre-built Executables
+Download the appropriate version for your screen resolution:
+- [Version 2 Beta (Latest)]([https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing))
+- [Version 1](https://drive.google.com/file/d/1VnVWywmsZ36UmtVhqn1e2B_h7gO3cig3/view?usp=sharing)
 
-**Items not being detected**
-- Check confidence threshold (default 89%)
-- Ensure shop is fully loaded before running
-- Verify game is at correct resolution/scaling
+### Option 2: Build from Source
 
-**Clicks missing targets**
-- Confirm window positions are correct
-- Check if game window was moved after setup
-- Restart application to recalibrate positions
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/yourusername/epic7-shop-automation.git
+   cd epic7-shop-automation
+   ```
 
-### Performance Tips
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- Close unnecessary applications for better performance
-- Ensure stable internet connection for shop loading
-- Use windowed mode for better window detection
-- Keep game window visible during automation
+3. **Run from Source**
+   ```bash
+   # For 1080p displays
+   python 1080_main.py
+   
+   # For 1440p displays
+   python 1440p_main.py
+   ```
 
-## Safety Features
+4. **Build Executable (Optional)**
+   ```bash
+   # For 1080p version
+   pyinstaller --onefile --windowed --add-data "1080shop_cov.png;." --add-data "1080shop_myst.png;." --add-data "icon.png;." --add-data "icon.ico;." --icon="icon.ico" --version-file version_info_1080p.txt --name "Secret Shop Bot 1080p" 1080_main.py
+   
+   # For 1440p version
+   pyinstaller --onefile --windowed --add-data "shop_cov.png;." --add-data "shop_myst.png;." --add-data "icon.png;." --add-data "icon.ico;." --icon="icon.ico" --version-file version_info_1440p.txt --name "Secret Shop Bot 1440p" 1440p_main.py
+   ```
 
-- **Failsafe Disabled**: PyAutoGUI failsafe is disabled for uninterrupted operation
-- **Emergency Stop**: Press 'Q' during loop to stop safely
-- **Window Validation**: Checks if game window still exists before actions
-- **Budget Protection**: Automatically stops when sky stone limit is reached
+## Usage Instructions
+
+### Setup
+1. Start Epic Seven and navigate to the Secret Shop
+2. Ensure the game is in fullscreen or windowed mode (not minimized)
+3. Launch the appropriate bot version for your screen resolution
+
+### Basic Operation
+1. **Single Run**: Click "Run Once" to refresh the shop one time (costs 3 sky stones)
+2. **Loop Mode**: 
+   - Set your sky stone budget
+   - Click "Start Loop" to run continuously
+   - Press 'Q' at any time to stop after the current cycle
+
+### Gold Management
+- Enable the gold threshold feature to automatically stop when gold drops below 300,000
+- Enter your current gold amount for accurate tracking
+- The bot deducts 184,000 gold for Covenant Bookmarks and 280,000 for Mystic Bookmarks
+
+### Controls
+- **Sky Stones Budget**: Set how many sky stones to spend (3 stones per refresh)
+- **Emergency Stop**: Press 'Q' during operation to stop safely
+- **Window Selection**: If multiple Epic Seven windows are detected, choose the correct one
+
+## Important Notes
+
+### Safety & Disclaimer
+- **Use at your own risk**: This bot automates game interactions which may violate terms of service
+- **No warranty**: The developers are not responsible for any account issues
+- **Fair play**: Consider the impact on game balance and other players
+
+### Limitations
+- Requires Epic Seven to be visible and active
+- Works best with stable internet connection
+- May need adjustment if game UI changes
+- Currently supports Windows only
+
+### Troubleshooting
+- **Bot doesn't find Epic Seven**: Ensure the game window title contains "Epic Seven"
+- **Items not detected**: Check that template images are in the same folder as the executable
+- **Clicks in wrong location**: Verify you're using the correct version for your screen resolution
+- **Bot stops unexpectedly**: Check console output for error messages
+
+## File Structure
+
+```
+epic7-shop-automation/
+├── 1080_main.py              # Main script for 1080p
+├── 1440p_main.py             # Main script for 1440p
+├── requirements.txt          # Python dependencies
+├── version_info_1080p.txt    # Version info for 1080p build
+├── version_info_1440p.txt    # Version info for 1440p build
+├── 1080shop_cov.png         # Covenant bookmark template (1080p)
+├── 1080shop_myst.png        # Mystic bookmark template (1080p)
+├── shop_cov.png             # Covenant bookmark template (1440p)
+├── shop_myst.png            # Mystic bookmark template (1440p)
+└── README.md                # This file
+```
 
 ## Contributing
 
+Contributions are welcome! Please:
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -134,19 +170,18 @@ YOU NEED TO COMPILE AND BUILD THE APP FOR IT TO WORK DO TO HOW
 
 ## License
 
-This project is for educational purposes only. Use at your own risk and ensure compliance with Epic Seven's terms of service.
-
-## Disclaimer
-
-This tool is not affiliated with Epic Seven or Smilegate. Users are responsible for ensuring their use complies with the game's terms of service. The authors are not responsible for any account actions that may result from using this tool.
+This project is provided as-is for educational purposes. Users are responsible for compliance with Epic Seven's terms of service.
 
 ## Support
 
-If you encounter issues or have questions:
-1. Check the troubleshooting section
-2. Review existing issues on GitHub
-3. Create a new issue with detailed information about your problem
+If you encounter issues:
+1. Check the troubleshooting section above
+2. Verify you're using the correct version for your resolution
+3. Ensure all dependencies are installed correctly
+4. Check that Epic Seven is running and visible
 
 ---
 
-**Note**: This automation tool requires the game to be running and visible. It does not modify game files or memory, only simulates mouse clicks and keyboard input.
+**Developer**: t2ddy  
+**Version**: 2.0 Beta  
+**Last Updated**: September 2025
