@@ -10,6 +10,11 @@ An automated bot for Epic Seven's Secret Shop that automatically refreshes and p
 4) **Your screen will auto-boarderfullscreen, keep it like that and move to the secret shop**
 5) **Enter the amount of skystones (and gold) you would like to spend and AFK**
 
+## Demo
+
+![Untitled video - Made with Clipchamp](https://github.com/user-attachments/assets/c1134679-fed4-495e-ab40-450e05b199a9)
+
+
 ## Features
 
 - **Automatic Shop Refresh**: Continuously refreshes the secret shop using sky stones
