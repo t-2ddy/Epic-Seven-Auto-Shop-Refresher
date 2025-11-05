@@ -4,11 +4,16 @@ An automated bot for Epic Seven's Secret Shop that automatically refreshes and p
 
 ## Quick Start
 
-1) **You can get the newest version from this google drive link **Version 2.1**: [Download here](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing)**
+1) **You can get the newest version from this google drive link **Version 2.1**: [Download here](https://drive.google.com/file/d/1_ZK-SypWfS7MHeUQSNS1omnWoYofxcux/view?usp=sharing)**
 2) **Extract anywhere on your pc**
 3) **Run bot/app as admin!!! Due to how smilegate handels their own games you need to allow the same permitions to the bot as well**
 4) **Your screen will auto-boarderfullscreen, keep it like that and move to the secret shop**
 5) **Enter the amount of skystones (and gold) you would like to spend and AFK**
+
+## Demo
+
+![Untitled video - Made with Clipchamp](https://github.com/user-attachments/assets/c1134679-fed4-495e-ab40-450e05b199a9)
+
 
 ## Features
 
@@ -19,12 +24,6 @@ An automated bot for Epic Seven's Secret Shop that automatically refreshes and p
 - **Flexible Controls**: Run single cycles or continuous loops with customizable budgets
 - **Safety Features**: Emergency stop with 'Q' key, window validation, and error handling
 - **User-Friendly GUI**: Clean interface with real-time statistics and status updates
-
-## Version Information
-
-- **Current Version**: 2.0 Beta
-- **Version 1**: [Download here](https://drive.google.com/file/d/1VnVWywmsZ36UmtVhqn1e2B_h7gO3cig3/view?usp=sharing)
-- **Version 2.1**: [Download here](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing)
 
 ## How It Works
 
@@ -66,7 +65,7 @@ The bot operates by:
 
 ### Option 1: Use Pre-built Executables
 Download the appropriate version for your screen resolution:
-- [Version 2 Beta (Latest)]([https://drive.google.com/file/d/1X-demMJbomh78bUV31OmZblT-andL57R/view?usp=sharing](https://drive.google.com/file/d/1j_ggsoIhfZt3CCIkAJ1AV_wZI4cMSF17/view?usp=sharing))
+- [Version 2_1 (Latest)](https://drive.google.com/file/d/1_ZK-SypWfS7MHeUQSNS1omnWoYofxcux/view?usp=sharing)
 - [Version 1](https://drive.google.com/file/d/1VnVWywmsZ36UmtVhqn1e2B_h7gO3cig3/view?usp=sharing)
 
 ### Option 2: Build from Source
