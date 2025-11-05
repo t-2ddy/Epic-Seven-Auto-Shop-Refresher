@@ -334,7 +334,7 @@ class ShopAutomation:
         self.myst_image = None
         
         self.running = False
-        self.pause_between_actions = 0.1
+        self.pause_between_actions = 0.25
         self.refresh_button_pos = None
         self.confirm_button_pos = None
         self.buy_button_offset = 700
@@ -703,7 +703,7 @@ class ShopAutomation:
             self.cov_purchased += 1
             purchased_something = True
             self.bought_cov_this_cycle = True
-            time.sleep(0.5)
+            time.sleep(0.8)
         
         # Re-capture the screen after a purchase to reduce stale coordinates
         if purchased_something:
@@ -760,7 +760,7 @@ class ShopAutomation:
                     self.stop_due_to_gold = True
             except Exception as _e:
                 pass
-        time.sleep(.5)
+        time.sleep(.9)
     
     def refresh_shop(self):
         self.focus_game_window()

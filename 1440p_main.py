@@ -334,7 +334,7 @@ class ShopAutomation:
         self.myst_image = None
         
         self.running = False
-        self.pause_between_actions = 0.1
+        self.pause_between_actions = 0.25
         self.refresh_button_pos = None
         self.confirm_button_pos = None
         self.buy_button_offset = 900
