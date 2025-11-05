@@ -780,7 +780,7 @@ class ShopAutomation:
         pyautogui.click()
         time.sleep(0.05)
         pyautogui.click()
-        time.sleep(1.0)
+        time.sleep(2.0)
         
         self.refreshes_done += 1
     
